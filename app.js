@@ -2,6 +2,7 @@ require("dotenv").config();
 
 const express = require("express");
 const bodyParser = require("body-parser");
+const mongoose = require("mongoose");
 
 const HttpError = require("./models/http-error");
 
@@ -30,4 +31,11 @@ app.use((error, req, res, next) => {
   res.json({ message: error.message || "An Unknown Error Occured" });
 });
 
-app.listen(4000);
+mongoose
+  .connect(process.env.MONGO_KEY)
+  .then(() => {
+    app.listen(4000);
+  })
+  .catch((err) => {
+    console.log(err);
+  });
